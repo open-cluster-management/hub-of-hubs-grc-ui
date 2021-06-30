@@ -35,7 +35,8 @@ $DIR/cluster-setup.sh
 
 echo "Export envs to run e2e"
 export SERVICEACCT_TOKEN=`${BUILD_HARNESS_PATH}/vendor/oc whoami --show-token`
-export headerUrl=https://`oc get route multicloud-console -n open-cluster-management -o=jsonpath='{.spec.host}'`
+installed_namespace=`oc get subscriptions.operators.coreos.com --all-namespaces | grep advanced-cluster-management | awk '{print $1}'`
+export headerUrl=https://`oc get route multicloud-console -n $installed_namespace -o=jsonpath='{.spec.host}'`
 export NODE_ENV=development 
 export API_SERVER_URL=$OC_HUB_CLUSTER_URL
 export OAUTH2_REDIRECT_URL=${OAUTH2_REDIRECT_URL:-"https://localhost:3000/multicloud/policies/auth/callback"}
