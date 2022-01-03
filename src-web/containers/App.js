@@ -6,7 +6,7 @@
 
 import React from 'react'
 import '../scss/common.scss'
-
+import { HubOfHubsHeader, HubOfHubsRoute } from 'hub-of-hubs-ui-components'
 import PropTypes from 'prop-types'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import client from '../../server/lib/shared/client'
@@ -17,8 +17,6 @@ import Page from '../components/common/Page'
 import CreationTab from './CreationTab'
 import AcmGrcPage from './AcmGrcPage'
 import { LocaleContext } from '../components/common/LocaleContext'
-import { AcmHeader, AcmRoute } from '@open-cluster-management/ui-components'
-import WelcomeStatic from './Welcome'
 import { getUserAccessData } from '../actions/access'
 import { connect } from 'react-redux'
 
@@ -98,23 +96,13 @@ const mapDispatchToProps = (dispatch) => {
 
 const AppWithUserAccess = withRouter(connect(mapStateToProps, mapDispatchToProps)(App))
 
-const getAcmRoute = (props) => {
-  let path = ''
-  if (client) {
-    path = window.location.pathname
-  } else {
-    path = props.url
-  }
-  if (path.includes(config.contextPath)) {
-    return AcmRoute.Governance
-  }
-  return AcmRoute.Welcome
+const getHubOfHubsRoute = () => {
+  return HubOfHubsRoute.Governance
 }
 
 // eslint-disable-next-line react/display-name
 export default props => (
-  <AcmHeader route={getAcmRoute(props)} >
+  <HubOfHubsHeader route={getHubOfHubsRoute()} >
     <Route path={config.contextPath} serverProps={props} component={AppWithUserAccess} />
-    <Route path={'/multicloud/welcome'} serverProps={props} component={WelcomeStatic} />
-  </AcmHeader>
+  </HubOfHubsHeader>
 )
