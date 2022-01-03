@@ -22,6 +22,21 @@ body {
   }
 }
 
+.pf-c-page__header {
+    background-color: blue;
+}
+
+.pf-c-page__sidebar.pf-m-expanded {
+    background-color: blue;
+}
+
+.pf-c-page__header-brand-link::after {
+    font-weight: bold;
+    font-size: xxx-large;
+  color: red;
+  content: "Hub-of-Hubs,Experimental";
+}
+
 .patternfly-spinner {
   position: fixed;
   top: 40%;
