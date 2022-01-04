@@ -96,13 +96,23 @@ const mapDispatchToProps = (dispatch) => {
 
 const AppWithUserAccess = withRouter(connect(mapStateToProps, mapDispatchToProps)(App))
 
-const getHubOfHubsRoute = () => {
-  return HubOfHubsRoute.Governance
+const getHubOfHubsRoute = (props) => {
+  let path = ''
+  if (client) {
+    path = window.location.pathname
+  } else {
+    path = props.url
+  }
+  if (path.includes(config.contextPath)) {
+    return HubOfHubsRoute.Governance
+  }
+
+  return HubOfHubsRoute.Clusters
 }
 
 // eslint-disable-next-line react/display-name
 export default props => (
-  <HubOfHubsHeader route={getHubOfHubsRoute()} >
+  <HubOfHubsHeader route={getHubOfHubsRoute(props)} >
     <Route path={config.contextPath} serverProps={props} component={AppWithUserAccess} />
   </HubOfHubsHeader>
 )
