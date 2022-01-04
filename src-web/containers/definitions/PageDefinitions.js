@@ -6,19 +6,15 @@
 import React from 'react'
 import { AcmButton, AcmSecondaryNavItem } from '@open-cluster-management/ui-components'
 
-import { ALL_POLICIES, SINGLE_POLICY, POLICY_STATUS, POLICY_STATUS_HISTORY, POLICY_TEMPLATE_DETAILS } from '../../utils/client/queries'
+import { ALL_POLICIES, SINGLE_POLICY } from '../../utils/client/queries'
 import config from '../../../server/lib/shared/config'
 // eslint-disable-next-line import/no-named-as-default
 import GrcView from '../../components/modules/GrcView'
 import { PolicyDetailsOverview } from '../../components/modules/PolicyDetailsOverview'
-import PolicyStatusView from '../../components/modules/PolicyStatusView'
-import PolicyTemplateDetailsView from '../../components/modules/PolicyTemplateDetailsView'
-import PolicyStatusHistoryView from '../../components/modules/PolicyStatusHistoryView'
 import msgs from '../../nls/platform.properties'
 import { checkCreatePermission, checkEditPermission } from '../../utils/CheckUserPermission'
 
 const policiesMsg = 'routes.policies'
-const historyMsg = 'table.header.history'
 
 export const getPageDefinition = (props) => {
   const { type } = props
@@ -27,14 +23,6 @@ export const getPageDefinition = (props) => {
       return policiesPage(props)
     case 'SINGLE_POLICY':
       return policyDetailsPage(props)
-    case 'POLICY_CLUSTERS':
-      return policyClustersPage(props)
-    case 'POLICY_TEMPLATES':
-      return policyTemplatesPage(props)
-    case 'POLICY_TEMPLATE_DETAILS':
-      return policyTemplateDetailsPage(props)
-    case 'POLICY_STATUS_HISTORY':
-      return policyStatusHistoryPage(props)
   }
   return null
 }
@@ -70,26 +58,6 @@ const detailsNav = ({ history, locale, name, namespace }) => {
   )
 }
 
-const clustersNav = ({ history, locale, name, namespace }) => {
-  const url = `${config.contextPath}/all/${namespace}/${name}/clusters`
-  return (
-    <AcmSecondaryNavItem key='clusters' isActive={history.location.pathname===url}
-      onClick={() => history.push(url)}>
-      {msgs.get('tabs.clusters', locale)}
-    </AcmSecondaryNavItem>
-  )
-}
-
-const templatesNav = ({ history, locale, name, namespace }) => {
-  const url = `${config.contextPath}/all/${namespace}/${name}/templates`
-  return (
-    <AcmSecondaryNavItem key='templates' isActive={history.location.pathname===url}
-      onClick={() => history.push(url)}>
-      {msgs.get('tabs.templates', locale)}
-    </AcmSecondaryNavItem>
-  )
-}
-
 const policiesPage = ({ locale }) => {
   return {
     id: 'policies',
@@ -113,87 +81,11 @@ const policyDetailsPage = ({ name, namespace, locale }) => {
       { text: name, to: name }
     ],
     navigation: [
-      detailsNav,
-      clustersNav,
-      templatesNav
+      detailsNav
     ],
     buttons: [ editBtn ],
     children: (props) => <PolicyDetailsOverview {...props} />
   }
 }
 
-const policyClustersPage = ({ name, namespace, locale }) => {
-  return {
-    id: 'policy-clusters',
-    title: name,
-    query: POLICY_STATUS,
-    query_variables: { policyName: name, hubNamespace: namespace },
-    refreshControls: true,
-    breadcrumb: [
-      { text: msgs.get(policiesMsg, locale), to: config.contextPath },
-      { text: name, to: name }
-    ],
-    navigation: [
-      detailsNav,
-      clustersNav,
-      templatesNav
-    ],
-    buttons: [ editBtn ],
-    children: (props) => <PolicyStatusView {...props} grouping='clusters' />
-  }
-}
-
-const policyTemplatesPage = ({ name, namespace, locale }) => {
-  return {
-    id: 'policy-templates',
-    title: name,
-    query: POLICY_STATUS,
-    query_variables: { policyName: name, hubNamespace: namespace },
-    refreshControls: true,
-    breadcrumb: [
-      { text: msgs.get(policiesMsg, locale), to: config.contextPath },
-      { text: name, to: name }
-    ],
-    navigation: [
-      detailsNav,
-      clustersNav,
-      templatesNav
-    ],
-    buttons: [ editBtn ],
-    children: (props) => <PolicyStatusView {...props} grouping='templates' />
-  }
-}
-
-const policyTemplateDetailsPage = ({ name, namespace, cluster, apiGroup, version, kind, template, locale }) => {
-  const selfLink = `/apis/${apiGroup}/${version}/namespaces/${cluster}/${kind}/${template}`
-  return {
-    id: 'policy-template-details',
-    title: template,
-    query: POLICY_TEMPLATE_DETAILS,
-    query_variables: { name:template, cluster, kind, selfLink },
-    refreshControls: true,
-    breadcrumb: [
-      { text: msgs.get(policiesMsg, locale), to: config.contextPath },
-      { text: name, to: `${config.contextPath}/all/${namespace}/${name}`},
-      { text: template, to: template }
-    ],
-    children: (props) => <PolicyTemplateDetailsView {...props} selfLink={selfLink} />
-  }
-}
-
-const policyStatusHistoryPage = ({ name, namespace, cluster, template, locale }) => {
-  return {
-    id: 'policy-status-history',
-    title: msgs.get(historyMsg, locale),
-    query: POLICY_STATUS_HISTORY,
-    query_variables: { policyName: name, hubNamespace: namespace, cluster, template },
-    refreshControls: true,
-    breadcrumb: [
-      { text: msgs.get(policiesMsg, locale), to: config.contextPath },
-      { text: name, to: `${config.contextPath}/all/${namespace}/${name}`},
-      { text: msgs.get(historyMsg, locale), to: msgs.get(historyMsg, locale) }
-    ],
-    children: (props) => <PolicyStatusHistoryView {...props} cluster={cluster} template={template} />
-  }
-}
 
