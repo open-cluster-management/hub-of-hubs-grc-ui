@@ -15,13 +15,11 @@ import React from 'react'
 import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
-import { Alert } from '@patternfly/react-core'
 import msgs from '../../nls/platform.properties'
-import { AcmDescriptionList, AcmTable } from '@open-cluster-management/ui-components'
+import { AcmDescriptionList } from '@open-cluster-management/ui-components'
 import NoResource from '../../components/common/NoResource'
-import policyDetailsClusterListDef from '../../tableDefinitions/policyDetailsClusterListDef'
 import policyDetailsOverviewDef from '../../tableDefinitions/policyDetailsOverviewDef'
-import { transform, getPolicyCompliantStatus, getAutomationLink } from '../../tableDefinitions/utils'
+import { getPolicyCompliantStatus, getAutomationLink } from '../../tableDefinitions/utils'
 import moment from 'moment'
 
 import '../../scss/policy-details-overview.scss'
@@ -86,20 +84,7 @@ export class PolicyDetailsOverview extends React.PureComponent{
     }
     const localItem = items[0]
     const { locale } = this.context
-    const clusterList = transform([localItem], policyDetailsClusterListDef, locale)
 
-    const modulesSecond = [
-      <AcmTable
-        key='cluster-list'
-        items={clusterList.rows}
-        columns={clusterList.columns}
-        keyFn={(item) => item.uid.toString()}
-        gridBreakPoint=''
-        autoHidePagination={true}
-      />
-    ]
-    const itemPR = Array.isArray(localItem?.placementPolicies) && localItem.placementPolicies.length > 0
-    const itemPB = Array.isArray(localItem?.placementBindings) && localItem.placementBindings.length > 0
     const descriptionItems = this.getDescriptionItems(policyDetailsOverviewDef.rows, localItem, locale)
     const itemsHalfCount = Math.ceil(descriptionItems.length / 2)
 
@@ -111,12 +96,6 @@ export class PolicyDetailsOverview extends React.PureComponent{
             leftItems={descriptionItems.slice(0, itemsHalfCount)}
             rightItems={descriptionItems.slice(itemsHalfCount)}
           />
-        </div>
-        <div className='vertical-expend cluster-list'>
-          <h5 className='section-title'>{msgs.get('table.header.placement', locale)}</h5>
-          {itemPR && itemPB
-            ? modulesSecond
-            : <Alert title={msgs.get('error.no.placement', locale)} isInline='true' />}
         </div>
       </div>
     )
