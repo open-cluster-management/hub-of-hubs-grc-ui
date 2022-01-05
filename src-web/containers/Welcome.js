@@ -87,15 +87,6 @@ export default class WelcomeStatic extends React.Component {
             }} >
             <GalleryItem>
               {this.welcomeCard(
-                'welcome-card-1-icon.svg',
-                msgs.get('welcome.card.one.title', locale),
-                msgs.get('welcome.card.one.desc', locale),
-                msgs.get('welcome.card.one.link', locale),
-                '/overview'
-              )}
-            </GalleryItem>
-            <GalleryItem>
-              {this.welcomeCard(
                 'welcome-card-2-icon.svg',
                 msgs.get('welcome.card.two.title', locale),
                 msgs.get('welcome.card.two.desc', locale),
@@ -105,29 +96,11 @@ export default class WelcomeStatic extends React.Component {
             </GalleryItem>
             <GalleryItem>
               {this.welcomeCard(
-                'welcome-card-3-icon.svg',
-                msgs.get('welcome.card.three.title', locale),
-                msgs.get('welcome.card.three.desc', locale),
-                msgs.get('welcome.card.three.link', locale),
-                '/multicloud/applications'
-              )}
-            </GalleryItem>
-            <GalleryItem>
-              {this.welcomeCard(
                 'welcome-card-4-icon.svg',
                 msgs.get('welcome.card.four.title', locale),
                 msgs.get('welcome.card.four.desc', locale),
                 msgs.get('welcome.card.four.link', locale),
                 '/multicloud/policies'
-              )}
-            </GalleryItem>
-            <GalleryItem>
-              {this.welcomeCard(
-                'welcome-card-5-icon.svg',
-                msgs.get('welcome.card.five.title', locale),
-                msgs.get('welcome.card.five.desc', locale),
-                msgs.get('welcome.card.five.link', locale),
-                '/multicloud/cluster-sets'
               )}
             </GalleryItem>
           </Gallery>
