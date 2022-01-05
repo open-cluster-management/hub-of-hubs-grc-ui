@@ -79,7 +79,7 @@
     "handlebars-loader": "^1.7.1",
     "helmet": "^4.6.0",
     "http-proxy-middleware": "^2.0.1",
-    "hub-of-hubs-ui-components": "github:open-cluster-management/hub-of-hubs-ui-components#v0.1.0",
+    "hub-of-hubs-ui-components": "github:open-cluster-management/hub-of-hubs-ui-components#v0.3.0",
     "ignore-styles": "^5.0.1",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",

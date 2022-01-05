@@ -7,6 +7,7 @@
 import React from 'react'
 import '../scss/common.scss'
 import { HubOfHubsHeader, HubOfHubsRoute } from 'hub-of-hubs-ui-components'
+import WelcomeStatic from './Welcome'
 import PropTypes from 'prop-types'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import client from '../../server/lib/shared/client'
@@ -107,12 +108,13 @@ const getHubOfHubsRoute = (props) => {
     return HubOfHubsRoute.Governance
   }
 
-  return HubOfHubsRoute.Clusters
+  return HubOfHubsRoute.Welcome
 }
 
 // eslint-disable-next-line react/display-name
 export default props => (
   <HubOfHubsHeader route={getHubOfHubsRoute(props)} >
     <Route path={config.contextPath} serverProps={props} component={AppWithUserAccess} />
+    <Route path={'/multicloud/welcome'} serverProps={props} component={WelcomeStatic} />
   </HubOfHubsHeader>
 )
