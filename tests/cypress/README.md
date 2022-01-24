@@ -8,8 +8,8 @@ Please note that this won't help if you are deading with outdated backend (e.g. 
 on a test server.
 
 The procedure basically follows the setup described in 
- * https://github.com/open-cluster-management/grc-ui/blob/main/README.md
- * https://github.com/open-cluster-management/grc-ui-api/blob/main/README.md, however in order to run Cypress tests only it can be distilled into the following steps:
+ * https://github.com/stolostron/grc-ui/blob/main/README.md
+ * https://github.com/stolostron/grc-ui-api/blob/main/README.md, however in order to run Cypress tests only it can be distilled into the following steps:
 
 1. Export environment variables necessary for a server to run and login. E.g.
 ```
@@ -63,7 +63,7 @@ export CYPRESS_OPTIONS_HUB_USER=kubeadmin  # or a different username
 export CYPRESS_OPTIONS_HUB_PASSWORD="password"  # here enter your password
 export CYPRESS_RESOURCE_ID=$(date +"%s")
 ```
-Please note that `start_cypress_tests.sh` will automatically export `CYPRESS_RESOURCE_ID` to a unique timestamp, it will be used to generate uniqe resource names. However it requires the respective code to call the [getUniqueResourceName()](https://github.com/open-cluster-management/grc-ui/blob/main/tests/cypress/scripts/utils.js#L10) function. You can also overwrite it by own resource id.
+Please note that `start_cypress_tests.sh` will automatically export `CYPRESS_RESOURCE_ID` to a unique timestamp, it will be used to generate uniqe resource names. However it requires the respective code to call the [getUniqueResourceName()](https://github.com/stolostron/grc-ui/blob/main/tests/cypress/scripts/utils.js#L10) function. You can also overwrite it by own resource id.
 
 2. Enter the test repo and start cypress
 ```
@@ -84,8 +84,8 @@ e.g. `getUniqueResourceName("my-policy")` returns `my-policy-12345` when `CYPRES
 e.g. `getUniqueResourceName("my-policy", '54321')` returns `my-policy-54321` with user own resource id  `54321`.
 
 ## Test configuration data
-If your test needs some test data you can store them in [tests/cypress/config](https://github.com/open-cluster-management/grc-ui/tree/main/tests/cypress/config) directory or its subdirectories. Each file in this directory is loaded at start up and the content is available through an environment variable.
-E.g. a content of [sample/demo-policy-raw.yaml](https://github.com/open-cluster-management/grc-ui/tree/main/tests/cypress/config/sample/demo-policy-raw.yaml) is available in variable `TEST_CONFIG_SAMPLE__DEMO_POLICY_RAW_YAML` and you can use getConfigObject(relativePath, format) function where `relativePath` is a path with respect to the `config` directory and format is the format of the actual config file.
+If your test needs some test data you can store them in [tests/cypress/config](https://github.com/stolostron/grc-ui/tree/main/tests/cypress/config) directory or its subdirectories. Each file in this directory is loaded at start up and the content is available through an environment variable.
+E.g. a content of [sample/demo-policy-raw.yaml](https://github.com/stolostron/grc-ui/tree/main/tests/cypress/config/sample/demo-policy-raw.yaml) is available in variable `TEST_CONFIG_SAMPLE__DEMO_POLICY_RAW_YAML` and you can use getConfigObject(relativePath, format) function where `relativePath` is a path with respect to the `config` directory and format is the format of the actual config file.
 Currently only `raw`, `txt`, `yaml` and `json` formats are supported.
 
 ```
@@ -123,14 +123,14 @@ In this section we are going to present and explain configuration file types tha
 ### cluster list
  * State: used in tests
  * Path: tests/cypress/config/clusters.yaml
- * Example: [config/clusters.yaml](https://github.com/open-cluster-management/grc-ui/blob/main/tests/cypress/config/clusters.yaml)
+ * Example: [config/clusters.yaml](https://github.com/stolostron/grc-ui/blob/main/tests/cypress/config/clusters.yaml)
 
 This configuration file contains details about clusters avaialable in RHACM. It is created by the `start_cypress_tests.sh` script before tests starts. However for locally issued tests you can modify this file with a different content.
 
 ### raw YAML file
  * State: used in tests
  * Path: Usually stored in a subfolder under `tests/cypress/config`.
- * Example: [tests/cypress/config/CertPolicyTest/test_certificate_raw.yaml](https://github.com/open-cluster-management/grc-ui/blob/main/tests/cypress/config/CertPolicyTest/test_certificate_raw.yaml).
+ * Example: [tests/cypress/config/CertPolicyTest/test_certificate_raw.yaml](https://github.com/stolostron/grc-ui/blob/main/tests/cypress/config/CertPolicyTest/test_certificate_raw.yaml).
 
 These files are used to contain a raw YAML which is being used in a test e.g. as a content of YAML editor. Substitutions can be used in order to adjust the content for the actual environment.
 
@@ -138,13 +138,13 @@ These files are used to contain a raw YAML which is being used in a test e.g. as
 ### policy description
  * State: used in tests
  * Path: Usually stored in a subfolder under `tests/cypress/config`.
- * Example: [config/IamPolicy_governance/policy-config.yaml](https://github.com/open-cluster-management/grc-ui/blob/main/tests/cypress/config/IamPolicy_governance/policy-config.yaml)
+ * Example: [config/IamPolicy_governance/policy-config.yaml](https://github.com/stolostron/grc-ui/blob/main/tests/cypress/config/IamPolicy_governance/policy-config.yaml)
 
 This configuration file contain policy details that can be used both for policy creation and policy validation (checking that policy as respective properties). In some cases multiple policies can be specified in one file, policy name being (usually) a section header. Within a section there are various policy attributes specified.
 
 ### violations patterns
  * State: used in tests
- * Path: [tests/cypress/config/violation-patterns.yaml](https://github.com/open-cluster-management/grc-ui/blob/main/tests/cypress/config/violation-patterns.yaml)
+ * Path: [tests/cypress/config/violation-patterns.yaml](https://github.com/stolostron/grc-ui/blob/main/tests/cypress/config/violation-patterns.yaml)
 
 This is a generic purpose file (used by multiple tests) containing violation message patterns (regexps) used for matching the actual vilation message in the policy status page. There is a separate section for each policy template and within a section there are multiple patterns listed, each having a numeric ID. From the policy pattern name (e.g. `comp-operator-ns`) and ID (e.g. `1`) a unique identifier for the message pattern is constructed (e.g. `comp-operator-ns-1`). Such identifiers are used for the expected cluster violation mapping described below. ID `0` is being used for the compliant message (i.e. there is no violation). ID '?' is being used for templates where the compliance status is unknown and therefore the cluster could be either compliant or non-compliant.
 Substitutions should be used for this configuration file in order to adjust template names according to the actual environment.
@@ -152,7 +152,7 @@ Substitutions should be used for this configuration file in order to adjust temp
 ### cluster violation mapping
  * State: used in tests
  * Path: Usually stored in a subfolder under `tests/cypress/config`.
- * Example: [config/demo/violations.yaml](https://github.com/open-cluster-management/grc-ui/blob/main/tests/cypress/config/demos/violations.yaml), [config/IamPolicy_governance/violations-inform.yaml](https://github.com/open-cluster-management/grc-ui/blob/main/tests/cypress/config/IamPolicy_governance/violations-inform.yaml)
+ * Example: [config/demo/violations.yaml](https://github.com/stolostron/grc-ui/blob/main/tests/cypress/config/demos/violations.yaml), [config/IamPolicy_governance/violations-inform.yaml](https://github.com/stolostron/grc-ui/blob/main/tests/cypress/config/IamPolicy_governance/violations-inform.yaml)
 
 The file describe violation message patterns that should be used when checking the actual violations on the detailed policy status page. There is a section per cluster and within the section there is a list of message pattern identifiers (described above) relevant for that particular cluster. There could be also a section having "*" instead of a cluster name, meaning this is the default mapping for server that are not listed.
 Substitutions should be used for this configuration file in order to adjust pattern identifiers according to the actual environment.
@@ -162,7 +162,7 @@ In a test, you may want to use two files instead, `violations-inform.yaml` mappi
 
 There are few facts that must be taken into account when doing a violation check in a test:
  * Each policy may have multiple specifications
- * Each specification should map to a template with unique name. See [issue 8088](https://github.com/open-cluster-management/backlog/issues/8088) for details
+ * Each specification should map to a template with unique name. See [issue 8088](https://github.com/stolostron/backlog/issues/8088) for details
  * Each template can report multiple different violations
  * Particular violation messages could vary a bit and therefore it seems reasonable to match them using regexp pattern
  * We SHOULD know which violations are expected to appear on a particular server based on its conviguration in a canary environment
