@@ -10,7 +10,7 @@
 
 .welcome {
   &--introduction {
-    background: blue;
+    background: linear-gradient(225deg, #000000 0%, #3D3D3D 100%); 
     padding: 0px 0px 0px 5rem;
     &__description {
       display: flex;
