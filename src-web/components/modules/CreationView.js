@@ -135,6 +135,14 @@ const controlData = [
     available: [false, true],
     reverse: 'Policy[0].spec.disabled',
   },
+  {
+    id: 'isLocalPolicy',
+    type: 'checkbox',
+    active: true,
+    hidden: true,
+    available: [false, true],
+    onSelect: window?.localStorage?.getItem('isInfrastructureOpen') === 'true'
+  }
 ]
 
 export default class CreationView extends React.Component {
@@ -176,6 +184,7 @@ export default class CreationView extends React.Component {
     const { locale } = this.context
     const {onCreate, fetchControl, createControl, buildControl, updateControl, discovered, policyDiscovered, createAndUpdateControl} = this.props
     const policyRepoPath = _.get(policyDiscovered, 'source.pathname')
+
     return (
       <div>
 				{policyDiscovered &&
