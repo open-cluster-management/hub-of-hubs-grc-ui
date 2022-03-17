@@ -130,17 +130,32 @@ export class GrcCardsModule extends React.Component {
     }))
   }
 
+  filterOutPolicies = (policies) => {
+    const fromHubManagement = window?.localStorage?.getItem('isInfrastructureOpen') === 'true'
+    const policyData = []
+    if (Array.isArray(policies) && policies.length > 0) {
+      policies.forEach((policy) => {
+        const isLocalPolicy = policy?.metadata?.annotations['hub-of-hubs.open-cluster-management.io/local-policy']
+        if (fromHubManagement && !!isLocalPolicy || !fromHubManagement && !isLocalPolicy) {
+          policyData.push(policy)
+        }
+      })
+    }
+    return policyData
+  }
+
   getPolicyCardData = () => {
     const { locale } = this.context
     const { grcItems, activeFilters } = this.props
     const { grcCardChoice } = this.state
     const other = msgs.get('overview.grc.overview.other', locale)
+    const grcPolices = this.filterOutPolicies(grcItems)
 
-    // loop thru grcItems under policies display
+    // loop thru grcPolices under policies display
     const dataMap = {}
     const policyMap = {}
     const clusterMap = {}
-    grcItems.map(policy => {
+    grcPolices.map(policy => {
       // get a policy's standards/categories
       let types, key
       const annotations = _.get(policy, 'metadata.annotations', {}) || {}

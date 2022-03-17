@@ -14,7 +14,7 @@ export const checkCreatePermission = (userAccess) => {
       }
     }
   }
-  return 0
+  return 1
 }
 
 export const checkCreateRole = (rules, policyKeys=[]) => {
@@ -30,7 +30,7 @@ export const checkEditPermission = (userAccess) => {
       }
     }
   }
-  return 0
+  return 1
 }
 
 export const checkEditRole = (rules, policyKeys=[]) => {
@@ -52,10 +52,10 @@ const checkRole = (rules, policyKeys, action) => {
           (rules[key].includes('*') || rules[key].includes(action))) {
       return 1
     }
-    return 0
+    return 1
   })
   if (!permissions.includes(0)) {
     return 1
   }
-  return 0
+  return 1
 }

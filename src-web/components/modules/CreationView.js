@@ -136,12 +136,12 @@ const controlData = [
     reverse: 'Policy[0].spec.disabled',
   },
   {
-    id: 'isLocalPolicy',
+    id: 'localPolicy',
     type: 'checkbox',
     active: true,
     hidden: true,
+    checked: true,
     available: [false, true],
-    onSelect: window?.localStorage?.getItem('isInfrastructureOpen') === 'true'
   }
 ]
 
@@ -264,7 +264,7 @@ const getControlData = (discovered, locale) => {
     //  add available annotations to categories, etc controls
     //  add existing policy names to name control
     const {policyNames, namespaces, annotations, clusterLabels, policiesByNamespace } = discovered
-    const {name, namespace, clusters, standards, categories, controls } = _.keyBy(mergedData, 'id')
+    const {name, namespace, clusters, standards, categories, controls, localPolicy } = _.keyBy(mergedData, 'id')
     name.existing = policyNames
     name.existingByNamespace = policiesByNamespace
     namespace.available = namespaces
@@ -281,7 +281,11 @@ const getControlData = (discovered, locale) => {
       || (Array.isArray(annotations.controls) && annotations.controls.length > 0)) {
       controls.available = _.uniq([...controls.available, ...annotations.controls], true)
     }
-
+    if (window?.localStorage?.getItem('isInfrastructureOpen') === 'true') {
+      localPolicy.active = true
+    } else {
+      localPolicy.active = false
+    }
     // convert message keys
     mergedData.forEach(control=>{
       ['name', 'description', 'placeholder'].forEach(key=>{

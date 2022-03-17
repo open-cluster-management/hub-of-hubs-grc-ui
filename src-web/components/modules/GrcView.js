@@ -109,6 +109,20 @@ export class GrcView extends React.Component {
     this.onUnload()
   }
 
+  filterOutPolicies = (policies) => {
+    const fromHubManagement = window?.localStorage?.getItem('isInfrastructureOpen') === 'true'
+    const policyData = []
+    if (Array.isArray(policies) && policies.length > 0) {
+      policies.forEach((policy) => {
+        const isLocalPolicy = policy?.metadata?.annotations['hub-of-hubs.open-cluster-management.io/local-policy']
+        if (fromHubManagement && !!isLocalPolicy || !fromHubManagement && !isLocalPolicy) {
+          policyData.push(policy)
+        }
+      })
+    }
+    return policyData
+  }
+
   render() {
     const { locale } = this.context
     const { viewState } = this.state
@@ -116,6 +130,7 @@ export class GrcView extends React.Component {
       items, activeFilters={}, location, access, history
     } = this.props
     const refetch = items.refetch
+    const filteredItems = this.filterOutPolicies(items)
 
     const displayType = location.pathname.split('/').pop()
     let filterGrcItems, filterToEmpty = false
@@ -123,7 +138,7 @@ export class GrcView extends React.Component {
     switch(displayType) {
     case 'all':
     default:
-      if (!items || items.length === 0) {
+      if (!filteredItems || filteredItems.length === 0) {
         return (
           <NoResource
             title={msgs.get('no-resource.title', [msgs.get('routes.grc', locale)], locale)}
@@ -138,8 +153,8 @@ export class GrcView extends React.Component {
         )
       }
       else {
-        filterGrcItems = filterPolicies(items, activeFilters, locale, 'metadata.annotations')
-        if (items.length > 0 && filterGrcItems.length === 0) {
+        filterGrcItems = filterPolicies(filteredItems, activeFilters, locale, 'metadata.annotations')
+        if (filteredItems.length > 0 && filterGrcItems.length === 0) {
           filterToEmpty = true
         }
       }

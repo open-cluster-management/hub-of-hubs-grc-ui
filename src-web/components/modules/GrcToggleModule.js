@@ -49,9 +49,10 @@ class GrcToggleModule extends React.Component {
     const { grcItems, grcTabToggleIndex, handleToggleClick, status, onClickTableAction } = this.props
     const { locale } = this.context
     const tableType = grcTabToggleIndex === 0 ? 'policies' : 'clusters'
+    const grcPolices = this.filterOutPolicies(grcItems)
     const tableData = [
-      transform(grcItems, grcPoliciesViewDef, locale),
-      transform(formatPoliciesToClustersTableData(grcItems), grcClustersViewDef, locale),
+      transform(grcPolices, grcPoliciesViewDef, locale),
+      transform(formatPoliciesToClustersTableData(grcPolices), grcClustersViewDef, locale),
     ]
     if (status !== REQUEST_STATUS.INCEPTION && status !== REQUEST_STATUS.DONE){
       return <Spinner className='patternfly-spinner' />
@@ -150,6 +151,20 @@ class GrcToggleModule extends React.Component {
     )
   }
 
+  filterOutPolicies = (policies) => {
+    const fromHubManagement = window?.localStorage?.getItem('isInfrastructureOpen') === 'true'
+    const policyData = []
+    if (Array.isArray(policies) && policies.length > 0) {
+      policies.forEach((policy) => {
+        const isLocalPolicy = policy?.metadata?.annotations['hub-of-hubs.open-cluster-management.io/local-policy']
+        if (fromHubManagement && !!isLocalPolicy || !fromHubManagement && !isLocalPolicy) {
+          policyData.push(policy)
+        }
+      })
+    }
+    return policyData
+  }
+
   handleSearch = (value) => {
     const searchValue = (typeof value === 'string') ? value : ''
     replaceSessionPair(GRC_SEARCH_STATE_COOKIE, componentName, searchValue, true)
@@ -175,18 +190,19 @@ class GrcToggleModule extends React.Component {
   tableActionResolver = (rowData) => {
     const { getResourceAction, userAccess, grcTabToggleIndex, history, grcItems } = this.props
     const { locale } = this.context
+    const grcPolices = this.filterOutPolicies(grcItems)
     let rowName, resourceType, tableActions, rowArray
     // Set table definitions and actions based on toggle position
     if (grcTabToggleIndex === 0) {
       rowName = _.get(rowData, 'name').rawData
       resourceType = RESOURCE_TYPES.POLICIES_BY_POLICY
       tableActions = grcPoliciesViewDef.tableActions
-      rowArray = grcItems
+      rowArray = grcPolices
     } else {
       rowName = _.get(rowData, 'cluster').rawData
       resourceType = RESOURCE_TYPES.POLICIES_BY_CLUSTER
       tableActions = grcClustersViewDef.tableActions
-      rowArray = formatPoliciesToClustersTableData(grcItems)
+      rowArray = formatPoliciesToClustersTableData(grcPolices)
     }
     const actionsList = []
     const userAccessHash = formatUserAccess(userAccess)
