@@ -7,10 +7,9 @@ metadata:
     policy.open-cluster-management.io/standards: {{#each standards}}{{ this }}{{^if @last}}, {{/if}}{{/each}}
     policy.open-cluster-management.io/categories: {{#each categories}}{{ this }}{{^if @last}}, {{/if}}{{/each}}
     policy.open-cluster-management.io/controls: {{#each controls}}{{ this }}{{^if @last}}, {{/if}}{{/each}}
-  {{#if localPolicy }}
-  labels:
+    {{#if localPolicy }}
     hub-of-hubs.open-cluster-management.io/local-policy: ""
-  {{/if}}
+    {{/if}}
 spec:
   remediationAction: {{remediation}}
   disabled: {{disabled}}
