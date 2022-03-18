@@ -135,14 +135,6 @@ const controlData = [
     available: [false, true],
     reverse: 'Policy[0].spec.disabled',
   },
-  {
-    id: 'localPolicy',
-    type: 'checkbox',
-    active: true,
-    hidden: true,
-    checked: true,
-    available: [false, true],
-  }
 ]
 
 export default class CreationView extends React.Component {
@@ -250,6 +242,11 @@ export default class CreationView extends React.Component {
 const getControlData = (discovered, locale) => {
   if (discovered) {
     const mergedData = _.cloneDeep(controlData)
+    // add localPolicy into mergedData
+    mergedData.push({
+      id: 'localPolicy',
+      active: true,
+    })
 
     // add preset spec choices from yaml
     const controlMap = _.keyBy(mergedData, 'id')

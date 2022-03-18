@@ -156,8 +156,8 @@ class GrcToggleModule extends React.Component {
     const policyData = []
     if (Array.isArray(policies) && policies.length > 0) {
       policies.forEach((policy) => {
-        const isLocalPolicy = policy?.metadata?.annotations['hub-of-hubs.open-cluster-management.io/local-policy']
-        if (fromHubManagement && !!isLocalPolicy || !fromHubManagement && !isLocalPolicy) {
+        const localPolicy = policy?.metadata?.annotations['hub-of-hubs.open-cluster-management.io/local-policy']
+        if (fromHubManagement && localPolicy == '' || !fromHubManagement && localPolicy === undefined) {
           policyData.push(policy)
         }
       })
