@@ -32,6 +32,10 @@ kind: PlacementBinding
 metadata:
   name: binding-{{name}}
   namespace: {{namespace}}
+  {{#if localPolicy }}
+  annotations:
+    hub-of-hubs.open-cluster-management.io/local-policy: ""
+  {{/if}}
 placementRef:
   name: placement-{{name}}
   kind: PlacementRule
@@ -46,6 +50,10 @@ kind: PlacementRule
 metadata:
   name: placement-{{name}}
   namespace: {{namespace}}
+  {{#if localPolicy }}
+  annotations:
+    hub-of-hubs.open-cluster-management.io/local-policy: ""
+  {{/if}}
 spec:
   clusterConditions:
   - status: "True"
