@@ -176,6 +176,7 @@ export default class CreationView extends React.Component {
     const { locale } = this.context
     const {onCreate, fetchControl, createControl, buildControl, updateControl, discovered, policyDiscovered, createAndUpdateControl} = this.props
     const policyRepoPath = _.get(policyDiscovered, 'source.pathname')
+
     return (
       <div>
 				{policyDiscovered &&
@@ -241,6 +242,11 @@ export default class CreationView extends React.Component {
 const getControlData = (discovered, locale) => {
   if (discovered) {
     const mergedData = _.cloneDeep(controlData)
+    // add localPolicy into mergedData
+    mergedData.push({
+      id: 'localPolicy',
+      active: true,
+    })
 
     // add preset spec choices from yaml
     const controlMap = _.keyBy(mergedData, 'id')
@@ -255,7 +261,7 @@ const getControlData = (discovered, locale) => {
     //  add available annotations to categories, etc controls
     //  add existing policy names to name control
     const {policyNames, namespaces, annotations, clusterLabels, policiesByNamespace } = discovered
-    const {name, namespace, clusters, standards, categories, controls } = _.keyBy(mergedData, 'id')
+    const {name, namespace, clusters, standards, categories, controls, localPolicy } = _.keyBy(mergedData, 'id')
     name.existing = policyNames
     name.existingByNamespace = policiesByNamespace
     namespace.available = namespaces
@@ -272,7 +278,11 @@ const getControlData = (discovered, locale) => {
       || (Array.isArray(annotations.controls) && annotations.controls.length > 0)) {
       controls.available = _.uniq([...controls.available, ...annotations.controls], true)
     }
-
+    if (window?.localStorage?.getItem('isInfrastructureOpen') === 'true') {
+      localPolicy.active = true
+    } else {
+      localPolicy.active = false
+    }
     // convert message keys
     mergedData.forEach(control=>{
       ['name', 'description', 'placeholder'].forEach(key=>{
