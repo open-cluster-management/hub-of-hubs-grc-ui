@@ -114,7 +114,7 @@ export class GrcView extends React.Component {
     const policyData = []
     if (Array.isArray(policies) && policies.length > 0) {
       policies.forEach((policy) => {
-        const localPolicy = policy?.metadata?.annotations['hub-of-hubs.open-cluster-management.io/local-policy']
+        const localPolicy = policy?.metadata?.annotations['hub-of-hubs.open-cluster-management.io/local-resource']
         if (fromHubManagement && localPolicy == '' || !fromHubManagement && localPolicy === undefined) {
           policyData.push(policy)
         }
