@@ -135,8 +135,8 @@ export class GrcCardsModule extends React.Component {
     const policyData = []
     if (Array.isArray(policies) && policies.length > 0) {
       policies.forEach((policy) => {
-        const localPolicy = policy?.metadata?.annotations['hub-of-hubs.open-cluster-management.io/local-resource']
-        if (fromHubManagement && localPolicy == '' || !fromHubManagement && localPolicy === undefined) {
+        const globalPolicy = policy?.metadata?.annotations['hub-of-hubs.open-cluster-management.io/global-resource']
+        if (!fromHubManagement && globalPolicy == '' || fromHubManagement && globalPolicy === undefined) {
           policyData.push(policy)
         }
       })

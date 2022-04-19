@@ -242,9 +242,9 @@ export default class CreationView extends React.Component {
 const getControlData = (discovered, locale) => {
   if (discovered) {
     const mergedData = _.cloneDeep(controlData)
-    // add localPolicy into mergedData
+    // add globalPolicy into mergedData
     mergedData.push({
-      id: 'localPolicy',
+      id: 'globalPolicy',
       active: true,
     })
 
@@ -261,7 +261,7 @@ const getControlData = (discovered, locale) => {
     //  add available annotations to categories, etc controls
     //  add existing policy names to name control
     const {policyNames, namespaces, annotations, clusterLabels, policiesByNamespace } = discovered
-    const {name, namespace, clusters, standards, categories, controls, localPolicy } = _.keyBy(mergedData, 'id')
+    const {name, namespace, clusters, standards, categories, controls, globalPolicy } = _.keyBy(mergedData, 'id')
     name.existing = policyNames
     name.existingByNamespace = policiesByNamespace
     namespace.available = namespaces
@@ -279,9 +279,9 @@ const getControlData = (discovered, locale) => {
       controls.available = _.uniq([...controls.available, ...annotations.controls], true)
     }
     if (window?.localStorage?.getItem('isInfrastructureOpen') === 'true') {
-      localPolicy.active = true
+      globalPolicy.active = true
     } else {
-      localPolicy.active = false
+      globalPolicy.active = false
     }
     // convert message keys
     mergedData.forEach(control=>{

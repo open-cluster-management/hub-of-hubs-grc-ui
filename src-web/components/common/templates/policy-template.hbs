@@ -7,8 +7,8 @@ metadata:
     policy.open-cluster-management.io/standards: {{#each standards}}{{ this }}{{^if @last}}, {{/if}}{{/each}}
     policy.open-cluster-management.io/categories: {{#each categories}}{{ this }}{{^if @last}}, {{/if}}{{/each}}
     policy.open-cluster-management.io/controls: {{#each controls}}{{ this }}{{^if @last}}, {{/if}}{{/each}}
-    {{#if localPolicy }}
-    hub-of-hubs.open-cluster-management.io/local-resource: ""
+    {{#if globalPolicy }}
+    hub-of-hubs.open-cluster-management.io/global-resource: ""
     {{/if}}
 spec:
   remediationAction: {{remediation}}
@@ -32,9 +32,9 @@ kind: PlacementBinding
 metadata:
   name: binding-{{name}}
   namespace: {{namespace}}
-  {{#if localPolicy }}
+  {{#if globalPolicy }}
   annotations:
-    hub-of-hubs.open-cluster-management.io/local-resource: ""
+    hub-of-hubs.open-cluster-management.io/global-resource: ""
   {{/if}}
 placementRef:
   name: placement-{{name}}
@@ -50,9 +50,9 @@ kind: PlacementRule
 metadata:
   name: placement-{{name}}
   namespace: {{namespace}}
-  {{#if localPolicy }}
+  {{#if globalPolicy }}
   annotations:
-    hub-of-hubs.open-cluster-management.io/local-resource: ""
+    hub-of-hubs.open-cluster-management.io/global-resource: ""
   {{/if}}
 spec:
   clusterConditions:
