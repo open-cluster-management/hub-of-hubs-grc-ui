@@ -7,9 +7,10 @@ metadata:
     policy.open-cluster-management.io/standards: {{#each standards}}{{ this }}{{^if @last}}, {{/if}}{{/each}}
     policy.open-cluster-management.io/categories: {{#each categories}}{{ this }}{{^if @last}}, {{/if}}{{/each}}
     policy.open-cluster-management.io/controls: {{#each controls}}{{ this }}{{^if @last}}, {{/if}}{{/each}}
-    {{#if localPolicy }}
+  {{#if localPolicy }}
+  labels:
     hub-of-hubs.open-cluster-management.io/local-resource: ""
-    {{/if}}
+  {{/if}}
 spec:
   remediationAction: {{remediation}}
   disabled: {{disabled}}
@@ -33,7 +34,7 @@ metadata:
   name: binding-{{name}}
   namespace: {{namespace}}
   {{#if localPolicy }}
-  annotations:
+  labels:
     hub-of-hubs.open-cluster-management.io/local-resource: ""
   {{/if}}
 placementRef:
@@ -51,7 +52,7 @@ metadata:
   name: placement-{{name}}
   namespace: {{namespace}}
   {{#if localPolicy }}
-  annotations:
+  labels:
     hub-of-hubs.open-cluster-management.io/local-resource: ""
   {{/if}}
 spec:
