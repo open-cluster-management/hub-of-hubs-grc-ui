@@ -174,6 +174,7 @@ export const ALL_POLICIES = gql`
         namespace
         selfLink
         annotations
+        labels
         resourceVersion
       }
       name
