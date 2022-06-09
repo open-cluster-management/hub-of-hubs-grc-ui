@@ -52,6 +52,10 @@ export default class WelcomeStatic extends React.Component {
     const { locale } = this.context
     const welcomeBoxLinkStr = 'welcome.connect.box.link'
     const welcomeBoxLabelStr = 'welcome.connect.label'
+    let welcomeClusterRoute = '/multicloud/clusters'
+    if (window?.localStorage?.getItem('isInfrastructureOpen') === 'true') {
+      welcomeClusterRoute = '/multicloud/hierarchy-clusters'
+    }
     return (
       <div className={'welcome'}>
         <div className='welcome--introduction' role='region' aria-label={msgs.get('welcome.label', locale)}>
@@ -91,7 +95,7 @@ export default class WelcomeStatic extends React.Component {
                 msgs.get('welcome.card.two.title', locale),
                 msgs.get('welcome.card.two.desc', locale),
                 msgs.get('welcome.card.two.link', locale),
-                '/multicloud/clusters'
+                welcomeClusterRoute
               )}
             </GalleryItem>
             <GalleryItem>
